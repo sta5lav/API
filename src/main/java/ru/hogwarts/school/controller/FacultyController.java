@@ -32,7 +32,6 @@ public class FacultyController {
                 .orElseGet(facultyService::getAll);
     }
 
-
     @PostMapping
     public Faculty addFaculty(@RequestBody Faculty faculty) {
         return facultyService.addFaculty(faculty);
