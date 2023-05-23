@@ -38,12 +38,12 @@ public class FacultyController {
     }
 
     @PutMapping(path = "/{id}")
-    public Faculty updateFaculty(@PathVariable long id, @RequestBody Faculty faculty) {
-        return facultyService.updateFaculty(id, faculty);
+    public Faculty updateFaculty(@RequestBody Faculty faculty) {
+        return facultyService.updateFaculty(faculty);
     }
 
     @DeleteMapping(path = "/{id}")
-    public Faculty deleteStudent(@PathVariable long id) {
-        return facultyService.deleteFacultyById(id);
+    public void deleteStudent(@PathVariable long id) {
+        facultyService.deleteFacultyById(id);
     }
 }

@@ -24,7 +24,8 @@ public class StudentController {
     }
 
     @GetMapping()
-    public Collection<Student> getAllStudents(@RequestParam (value = "age", required = false) Integer age) {
+    public Collection<Student> getAllStudents
+            (@RequestParam (value = "age", required = false) Integer age) {
         return Optional.ofNullable(age)
                 .map(a -> studentService.getAllById(age))
                 .orElseGet(studentService::getAll);
@@ -36,13 +37,13 @@ public class StudentController {
     }
 
     @PutMapping(path = "/{id}")
-    public Student updateStudent(@PathVariable long id, @RequestBody Student student) {
-        return studentService.updateStudent(id, student);
+    public Student updateStudent(@RequestBody Student student) {
+        return studentService.updateStudent(student);
     }
 
     @DeleteMapping(path = "/{id}")
-    public Student deleteStudent(@PathVariable long id) {
-        return studentService.deleteStudentById(id);
+    public void deleteStudent(@PathVariable long id) {
+        studentService.deleteStudentById(id);
     }
 
 }

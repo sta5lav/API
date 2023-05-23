@@ -1,8 +1,8 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,47 +11,36 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-    private static long idS = 0;
+    private StudentRepository studentRepository;
 
-    private final Map<Long, Student> students = new HashMap<>();
-
-
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student addStudent(Student student) {
-        student.setId(idS++);
-        students.put(student.getId(), student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public Student getById(long id) {
-        if(students.containsKey(id)){
-            return students.get(id);
-        }
-        return null;
+        return studentRepository.findById(id).get();
     }
 
-    public Student updateStudent(long id, Student student) {
-        if(students.containsKey(id)){
-            students.replace(id, student);
-        }
-        return null;
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
     }
 
     public Collection<Student> getAll() {
-        return Collections.unmodifiableCollection(students.values());
+        return studentRepository.findAll();
     }
 
-    public Collection<Student> getAllById(int age) {
-        return students.values().stream()
-                .filter(student -> student.getAge() == age)
+    public Collection<Student> getAllById(Integer age) {
+        return studentRepository.findAll().stream()
+                .filter(student -> student.getAge()==age)
                 .collect(Collectors.toList());
     }
 
-    public Student deleteStudentById(long id) {
-        if(students.containsKey(id)){
-            return students.remove(id);
-        }
-        return null;
+    public void deleteStudentById(long id) {
+        studentRepository.deleteById(id);
     }
 
 
