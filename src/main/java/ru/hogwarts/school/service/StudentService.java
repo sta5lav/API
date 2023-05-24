@@ -1,9 +1,12 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,13 +14,23 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    private final FacultyRepository facultyRepository;
+
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
     }
 
+
     public Student addStudent(Student student) {
+        student.setId(null);
+        student.setFaculty(Optional.ofNullable(student.getFaculty())
+                .filter(f -> f.getId() != null)
+                .flatMap(f -> facultyRepository.findById(f.getId()))
+                .orElse(null)
+        );
         return studentRepository.save(student);
     }
 
@@ -28,6 +41,11 @@ public class StudentService {
     public Student updateStudent(long id, Student student) {
         if (studentRepository.existsById(id)) {
             student.setId(id);
+            student.setFaculty(Optional.ofNullable(student.getFaculty())
+                    .filter(f -> f.getId() != null)
+                    .flatMap(f -> facultyRepository.findById(f.getId()))
+                    .orElse(null)
+            );
             return studentRepository.save(student);
         }
         return null;
@@ -45,5 +63,13 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
+    public Collection<Student> findStudentByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
 
+
+    public Optional<Faculty> getFacultyOfStudentById(long id) {
+        return studentRepository.findById(id)
+                .map(Student::getFaculty);
+    }
 }

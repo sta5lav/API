@@ -7,6 +7,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,11 +26,21 @@ public class FacultyController {
         return facultyService.getById(id);
     }
 
+    @GetMapping(path = "filterByColorOrName")
+    public Collection<Faculty> getAllByColorOrNameIgnoreCase(@RequestParam (value = "colorOrName", required = false) String colorOrName) {
+        return facultyService.getFacultyByColorOrNameIgnoreCase(colorOrName);
+    }
+
     @GetMapping()
     public Collection<Faculty> getAllFaculties(@RequestParam (value = "color", required = false) String color) {
         return Optional.ofNullable(color)
                 .map(a -> facultyService.getAllById(color))
                 .orElseGet(facultyService::getAll);
+    }
+
+    @GetMapping(path = "/{id}/students")
+    public Collection<Student> getStudentsOfFacultyById(@PathVariable long id) {
+        return facultyService.ggetStudentsOfFacultyById(id);
     }
 
     @PostMapping
