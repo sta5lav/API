@@ -21,7 +21,7 @@ public class FacultyController {
     }
 
     @GetMapping(path = "/{id}")
-    public Faculty getStudentById(@PathVariable() long id) {
+    public Optional<Faculty> getStudentById(@PathVariable() long id) {
         return facultyService.getById(id);
     }
 
@@ -38,8 +38,8 @@ public class FacultyController {
     }
 
     @PutMapping(path = "/{id}")
-    public Faculty updateFaculty(@RequestBody Faculty faculty) {
-        return facultyService.updateFaculty(faculty);
+    public Faculty updateFaculty(@PathVariable long id,@RequestBody Faculty faculty) {
+        return facultyService.updateFaculty(id, faculty);
     }
 
     @DeleteMapping(path = "/{id}")

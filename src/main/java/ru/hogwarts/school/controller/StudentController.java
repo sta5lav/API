@@ -19,7 +19,7 @@ public class StudentController {
     private  final StudentService studentService;
 
     @GetMapping(path = "/{id}")
-    public Student getStudentById(@PathVariable() long id) {
+    public Optional<Student> getStudentById(@PathVariable() long id) {
         return studentService.getById(id);
     }
 
@@ -37,8 +37,8 @@ public class StudentController {
     }
 
     @PutMapping(path = "/{id}")
-    public Student updateStudent(@RequestBody Student student) {
-        return studentService.updateStudent(student);
+    public Student updateStudent(@PathVariable long id, @RequestBody Student student) {
+        return studentService.updateStudent(id, student);
     }
 
     @DeleteMapping(path = "/{id}")

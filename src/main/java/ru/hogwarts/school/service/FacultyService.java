@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -22,12 +23,16 @@ public class FacultyService {
     }
 
 
-    public Faculty getById(long id) {
-        return facultyRepository.findById(id).get();
+    public Optional<Faculty> getById(long id) {
+        return facultyRepository.findById(id);
     }
 
-    public Faculty updateFaculty(Faculty faculty) {
-        return facultyRepository.save(faculty);
+    public Faculty updateFaculty(long id, Faculty faculty) {
+        if (facultyRepository.existsById(id)) {
+            faculty.setId(id);
+            return facultyRepository.save(faculty);
+        }
+        return null;
     }
 
     public Collection<Faculty> getAll() {
@@ -35,9 +40,7 @@ public class FacultyService {
     }
 
     public Collection<Faculty> getAllById(String color) {
-        return facultyRepository.findAll().stream()
-                .filter(faculty -> faculty.getColor().equals(color))
-                .collect(Collectors.toList());
+        return facultyRepository.findAllByColor(color);
     }
 
     public void deleteFacultyById(long id) {
