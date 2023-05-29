@@ -2,8 +2,9 @@ package ru.hogwarts.school.controller;
 
 
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.entity.Faculty;
+import ru.hogwarts.school.entity.Student;
+import ru.hogwarts.school.entity.StudentsByCategory;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -43,6 +44,22 @@ public class StudentController {
         return studentService.getFacultyOfStudentById(id);
     }
 
+    @GetMapping(path = "/getAllStudents")
+    public Collection<StudentsByCategory> getAllStudentsSQLRequest() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping(path = "/getAverageAgeOfStudents")
+    public Integer getAverageAgeOfStudents() {
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping(path = "/getFiveLastStudents")
+    public Collection<StudentsByCategory> getFiveLastStudents() {
+        return studentService.getFiveLastStudents();
+    }
+
+
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
@@ -57,5 +74,7 @@ public class StudentController {
     public void deleteStudent(@PathVariable long id) {
         studentService.deleteStudentById(id);
     }
+
+
 
 }
