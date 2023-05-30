@@ -8,6 +8,5 @@ public interface AvatarList {
 
     String mediaType();
 
-    Byte[] data();
 
 }

@@ -3,7 +3,7 @@ select * from student;
 select * from student as s
 where age between 10 and 20;
 
-select name from student;
+select count(*) as "количество студентов" from student;
 
 select * from student as s
 where name like '%о%';
