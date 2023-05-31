@@ -2,7 +2,9 @@ package ru.hogwarts.school.controller;
 
 
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.entity.Faculty;
+import ru.hogwarts.school.entity.Student;
+import ru.hogwarts.school.entity.StudentsByCategory;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -19,16 +21,44 @@ public class StudentController {
     private  final StudentService studentService;
 
     @GetMapping(path = "/{id}")
-    public Student getStudentById(@PathVariable() long id) {
+    public Optional<Student> getStudentById(@PathVariable() long id) {
         return studentService.getById(id);
     }
 
-    @GetMapping()
-    public Collection<Student> getAllStudents(@RequestParam (value = "age", required = false) Integer age) {
+    @GetMapping("/findByAgeBetween")
+    public Collection<Student> getStudentByAgeBetween(@RequestParam("min") int min,
+                                                      @RequestParam("max") int max) {
+        return studentService.findStudentByAgeBetween(min, max);
+    }
+
+    @GetMapping
+    public Collection<Student> getAllStudents
+            (@RequestParam (value = "age", required = false) Integer age) {
         return Optional.ofNullable(age)
                 .map(a -> studentService.getAllById(age))
                 .orElseGet(studentService::getAll);
     }
+
+    @GetMapping(path = "/{id}/faculty")
+    public Optional<Faculty> getFacultyOfStudentById(@PathVariable long id) {
+        return studentService.getFacultyOfStudentById(id);
+    }
+
+    @GetMapping(path = "/getAllStudents")
+    public Collection<StudentsByCategory> getAllStudentsSQLRequest() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping(path = "/getAverageAgeOfStudents")
+    public Integer getAverageAgeOfStudents() {
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping(path = "/getFiveLastStudents")
+    public Collection<StudentsByCategory> getFiveLastStudents() {
+        return studentService.getFiveLastStudents();
+    }
+
 
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
@@ -41,7 +71,10 @@ public class StudentController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public Student deleteStudent(@PathVariable long id) {
-        return studentService.deleteStudentById(id);
+    public void deleteStudent(@PathVariable long id) {
+        studentService.deleteStudentById(id);
     }
+
+
+
 }
