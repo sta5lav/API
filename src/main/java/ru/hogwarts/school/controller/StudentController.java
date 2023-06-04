@@ -35,7 +35,7 @@ public class StudentController {
     public Collection<Student> getAllStudents
             (@RequestParam (value = "age", required = false) Integer age) {
         return Optional.ofNullable(age)
-                .map(a -> studentService.getAllById(age))
+                .map(a -> studentService.getAllByAge(age))
                 .orElseGet(studentService::getAll);
     }
 

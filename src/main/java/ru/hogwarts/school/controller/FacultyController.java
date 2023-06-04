@@ -33,13 +33,13 @@ public class FacultyController {
     @GetMapping()
     public Collection<Faculty> getAllFaculties(@RequestParam (value = "color", required = false) String color) {
         return Optional.ofNullable(color)
-                .map(a -> facultyService.getAllById(color))
+                .map(a -> facultyService.getAllByColor(color))
                 .orElseGet(facultyService::getAll);
     }
 
     @GetMapping(path = "/{id}/students")
     public Collection<Student> getStudentsOfFacultyById(@PathVariable long id) {
-        return facultyService.ggetStudentsOfFacultyById(id);
+        return facultyService.getStudentsOfFacultyById(id);
     }
 
     @PostMapping
