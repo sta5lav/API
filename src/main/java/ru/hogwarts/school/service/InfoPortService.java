@@ -1,7 +1,18 @@
 package ru.hogwarts.school.service;
 
-public interface InfoPortService {
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-    public Integer getPort();
+@Service
+public class InfoPortService {
 
+    @Value("${server.port}")
+    private Integer port;
+
+
+
+    public Integer getPort() {
+        return port;
+    }
 }
