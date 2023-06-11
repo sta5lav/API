@@ -8,6 +8,7 @@ import ru.hogwarts.school.entity.StudentsByCategory;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,7 +36,7 @@ public class StudentController {
     public Collection<Student> getAllStudents
             (@RequestParam (value = "age", required = false) Integer age) {
         return Optional.ofNullable(age)
-                .map(a -> studentService.getAllById(age))
+                .map(a -> studentService.getAllByAge(age))
                 .orElseGet(studentService::getAll);
     }
 
@@ -43,6 +44,12 @@ public class StudentController {
     public Optional<Faculty> getFacultyOfStudentById(@PathVariable long id) {
         return studentService.getFacultyOfStudentById(id);
     }
+
+    @GetMapping(path = "/getAllStudentsStartsWithA")
+    public List<Object> getStudentByNameWithSort() {
+        return studentService.getStudentByNameWithSort();
+    }
+
 
     @GetMapping(path = "/getAllStudents")
     public Collection<StudentsByCategory> getAllStudentsSQLRequest() {
@@ -57,6 +64,11 @@ public class StudentController {
     @GetMapping(path = "/getFiveLastStudents")
     public Collection<StudentsByCategory> getFiveLastStudents() {
         return studentService.getFiveLastStudents();
+    }
+
+    @GetMapping(path = "/averageAgeStream")
+    public Integer getAverageAgeOfStudentsByStream() {
+        return studentService.getAverageAgeOfStudentsByStream();
     }
 
 

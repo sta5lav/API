@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controller;
 
 
+import liquibase.pro.packaged.S;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.entity.Student;
@@ -33,13 +34,23 @@ public class FacultyController {
     @GetMapping()
     public Collection<Faculty> getAllFaculties(@RequestParam (value = "color", required = false) String color) {
         return Optional.ofNullable(color)
-                .map(a -> facultyService.getAllById(color))
+                .map(a -> facultyService.getAllByColor(color))
                 .orElseGet(facultyService::getAll);
     }
 
     @GetMapping(path = "/{id}/students")
     public Collection<Student> getStudentsOfFacultyById(@PathVariable long id) {
-        return facultyService.ggetStudentsOfFacultyById(id);
+        return facultyService.getStudentsOfFacultyById(id);
+    }
+
+    @GetMapping(path = "/getMaxLengthOfNameFaculty()")
+    public String getMaxLengthOfNameFaculty() {
+        return facultyService.getMaxLengthOfNameFaculty();
+    }
+
+    @GetMapping(path = "/sum")
+    public String sum() {
+        return facultyService.sum();
     }
 
     @PostMapping
