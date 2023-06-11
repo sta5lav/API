@@ -20,6 +20,9 @@ public class StudentService {
 
     private final FacultyRepository facultyRepository;
 
+    private final Object flag = new Object();
+
+
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
@@ -115,4 +118,46 @@ public class StudentService {
                 .orElse(0);
     }
 
+    public void getAllStudentsForConsole() {
+        getNameFromStudents(10);
+        getNameFromStudents(11);
+
+        new Thread(() -> {
+            getNameFromStudents(12);
+            getNameFromStudents(13);
+            }).start();
+
+        new Thread(() -> {
+            getNameFromStudents(14);
+            getNameFromStudents(15);
+        }).start();
+    }
+
+    public void getAllStudentsForConsoleSynchronized() {
+        getNameFromStudentsSynchronized(10);
+        getNameFromStudentsSynchronized(11);
+
+        new Thread(() -> {
+            getNameFromStudentsSynchronized(12);
+            getNameFromStudentsSynchronized(13);
+        }).start();
+
+        new Thread(() -> {
+            getNameFromStudentsSynchronized(14);
+            getNameFromStudentsSynchronized(15);
+        }).start();
+    }
+
+
+    public void getNameFromStudents(long id) {
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName());
+    }
+
+    public void getNameFromStudentsSynchronized(long id) {
+        synchronized (flag) {
+            Student student = studentRepository.findStudentById(id);
+            System.out.println(student.getName());
+        }
+    }
 }
