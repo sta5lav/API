@@ -22,6 +22,8 @@ public class StudentService {
 
     private final Object flag = new Object();
 
+    private Long index = 10L;
+
 
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
@@ -90,7 +92,7 @@ public class StudentService {
 
     public Collection<StudentsByCategory> getAllStudents() {
         logger.info("Was invoked method for get all students");
-       return studentRepository.getAllStudents();
+        return studentRepository.getAllStudents();
     }
 
     public Integer getAverageAgeOfStudents() {
@@ -125,7 +127,7 @@ public class StudentService {
         new Thread(() -> {
             getNameFromStudents(12);
             getNameFromStudents(13);
-            }).start();
+        }).start();
 
         new Thread(() -> {
             getNameFromStudents(14);
@@ -134,18 +136,12 @@ public class StudentService {
     }
 
     public void getAllStudentsForConsoleSynchronized() {
-        getNameFromStudentsSynchronized(10);
-        getNameFromStudentsSynchronized(11);
+        printAllStudentsForConsoleSynchronized();
 
-        new Thread(() -> {
-            getNameFromStudentsSynchronized(12);
-            getNameFromStudentsSynchronized(13);
-        }).start();
+        new Thread(this::printAllStudentsForConsoleSynchronized).start();
 
-        new Thread(() -> {
-            getNameFromStudentsSynchronized(14);
-            getNameFromStudentsSynchronized(15);
-        }).start();
+        new Thread(this::printAllStudentsForConsoleSynchronized).start();
+
     }
 
 
@@ -155,9 +151,12 @@ public class StudentService {
     }
 
     public void getNameFromStudentsSynchronized(long id) {
-        synchronized (flag) {
-            Student student = studentRepository.findStudentById(id);
-            System.out.println(student.getName());
-        }
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName());
+    }
+
+    public synchronized void printAllStudentsForConsoleSynchronized() {
+        getNameFromStudentsSynchronized(index++);
+        getNameFromStudentsSynchronized(index++);
     }
 }
