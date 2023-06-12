@@ -20,8 +20,6 @@ public class StudentService {
 
     private final FacultyRepository facultyRepository;
 
-    private final Object flag = new Object();
-
     private Long index = 10L;
 
 
