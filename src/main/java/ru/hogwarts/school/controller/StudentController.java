@@ -19,7 +19,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    private  final StudentService studentService;
+    private final StudentService studentService;
 
     @GetMapping(path = "/{id}")
     public Optional<Student> getStudentById(@PathVariable() long id) {
@@ -69,6 +69,16 @@ public class StudentController {
     @GetMapping(path = "/averageAgeStream")
     public Integer getAverageAgeOfStudentsByStream() {
         return studentService.getAverageAgeOfStudentsByStream();
+    }
+
+    @GetMapping(path = "/getAllStudentsForConsole")
+    public void getAllStudentsForConsole() {
+       studentService.getAllStudentsForConsole();
+    }
+
+    @GetMapping(path = "/getAllStudentsForConsoleSynchronized")
+    public void getAllStudentsForConsoleSynchronized() {
+       studentService.getAllStudentsForConsoleSynchronized();
     }
 
 

@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

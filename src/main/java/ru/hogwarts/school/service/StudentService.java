@@ -20,6 +20,9 @@ public class StudentService {
 
     private final FacultyRepository facultyRepository;
 
+    private Long index = 10L;
+
+
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
@@ -87,7 +90,7 @@ public class StudentService {
 
     public Collection<StudentsByCategory> getAllStudents() {
         logger.info("Was invoked method for get all students");
-       return studentRepository.getAllStudents();
+        return studentRepository.getAllStudents();
     }
 
     public Integer getAverageAgeOfStudents() {
@@ -115,4 +118,43 @@ public class StudentService {
                 .orElse(0);
     }
 
+    public void getAllStudentsForConsole() {
+        getNameFromStudents(10);
+        getNameFromStudents(11);
+
+        new Thread(() -> {
+            getNameFromStudents(12);
+            getNameFromStudents(13);
+        }).start();
+
+        new Thread(() -> {
+            getNameFromStudents(14);
+            getNameFromStudents(15);
+        }).start();
+    }
+
+    public void getAllStudentsForConsoleSynchronized() {
+        printAllStudentsForConsoleSynchronized();
+
+        new Thread(this::printAllStudentsForConsoleSynchronized).start();
+
+        new Thread(this::printAllStudentsForConsoleSynchronized).start();
+
+    }
+
+
+    public void getNameFromStudents(long id) {
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName());
+    }
+
+    public void getNameFromStudentsSynchronized(long id) {
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName());
+    }
+
+    public synchronized void printAllStudentsForConsoleSynchronized() {
+        getNameFromStudentsSynchronized(index++);
+        getNameFromStudentsSynchronized(index++);
+    }
 }
